@@ -24,23 +24,17 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-
-const formSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  password: z
-    .string()
-    .min(8, "Your password should be at least 8 characters long"),
-});
+import { signUpSchema } from "../schemas";
+import { useRegister } from "../api/use-register";
 
 export const SignUpCard = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<z.infer<typeof signUpSchema>>({
     defaultValues: { name: "", email: "", password: "" },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(signUpSchema),
   });
-
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const { mutate } = useRegister();
+  const onSubmit = (values: z.infer<typeof signUpSchema>) => {
+    mutate({ json: values });
   };
 
   return (
@@ -140,6 +134,17 @@ export const SignUpCard = () => {
           <FaGithub className="mr-2 size-5" />
           Login with Github
         </Button>
+      </CardContent>
+      <div className="px-7">
+        <DottedSeparator />
+      </div>
+      <CardContent className="p-7 flex items-center justify-center">
+        <p>
+          Already have an account?{" "}
+          <Link href={"/sign-in"}>
+            <span className="text-blue-700">Login</span>
+          </Link>
+        </p>
       </CardContent>
     </Card>
   );
