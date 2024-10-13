@@ -27,7 +27,7 @@ export const SignInCard = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const { mutate } = useLogin();
+  const { mutate, isPending } = useLogin();
 
   const onSubmit = (values: z.infer<typeof loginSchema>) => {
     mutate({ json: values });
@@ -77,7 +77,7 @@ export const SignInCard = () => {
               )}
             />
 
-            <Button disabled={false} size="lg" className="w-full">
+            <Button disabled={isPending} size="lg" className="w-full">
               Login
             </Button>
           </form>

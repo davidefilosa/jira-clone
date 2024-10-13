@@ -32,7 +32,7 @@ export const SignUpCard = () => {
     defaultValues: { name: "", email: "", password: "" },
     resolver: zodResolver(signUpSchema),
   });
-  const { mutate } = useRegister();
+  const { mutate, isPending } = useRegister();
   const onSubmit = (values: z.infer<typeof signUpSchema>) => {
     mutate({ json: values });
   };
@@ -107,7 +107,7 @@ export const SignUpCard = () => {
               )}
             />
 
-            <Button disabled={false} size="lg" className="w-full">
+            <Button disabled={isPending} size="lg" className="w-full">
               Sign Up
             </Button>
           </form>

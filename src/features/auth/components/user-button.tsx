@@ -4,12 +4,11 @@ import React from "react";
 import { useCurrent } from "../api/use-current";
 import { useLogout } from "../api/use-logout";
 import { Loader, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DottedSeparator } from "@/components/dotted-separator";
