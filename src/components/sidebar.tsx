@@ -3,6 +3,7 @@ import React from "react";
 import { Logo } from "./logo";
 import { DottedSeparator } from "./dotted-separator";
 import { Navigation } from "./navigation";
+import { WorkspacesSwitcher } from "./workspaces-switcher";
 
 export const Sidebar = () => {
   return (
@@ -10,6 +11,8 @@ export const Sidebar = () => {
       <Link href={"/"}>
         <Logo />
       </Link>
+      <DottedSeparator className="my-4" />
+      <WorkspacesSwitcher />
       <DottedSeparator className="my-4" />
       <Navigation />
     </aside>
