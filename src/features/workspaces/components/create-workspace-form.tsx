@@ -53,6 +53,7 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
         onSuccess: () => {
           form.reset();
         },
+        onError: (error) => console.log(error),
       }
     );
   };
@@ -68,7 +69,10 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
       </div>
       <CardContent className="p-7">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            encType="multipart/form-data"
+          >
             <div className="flex flex-col gap-y-4">
               <FormField
                 control={form.control}
