@@ -10,6 +10,7 @@ import {
 } from "@/config";
 import { ID, Query } from "node-appwrite";
 import { MemberRole } from "@/features/members/types";
+import { generateInviteCode } from "@/lib/utils";
 
 const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
@@ -18,10 +19,6 @@ const app = new Hono()
     const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
       Query.equal("userId", user.$id),
     ]);
-
-    if (!members.documents.length) {
-      return c.json({ data: [], total: 0 });
-    }
 
     const workspaceIds = members.documents.map((member) => member.workspaceId);
     const workspaces = await databases.listDocuments(
@@ -60,11 +57,13 @@ const app = new Hono()
         ).toString("base64")}`;
       }
 
+      const inviteCode = generateInviteCode(10);
+
       const workspace = await databases.createDocument(
         DATABASE_ID,
         WORKSPACES_ID,
         ID.unique(),
-        { name, userId: user.$id, imageUrl: updatedImageUrl }
+        { name, userId: user.$id, imageUrl: updatedImageUrl, inviteCode }
       );
 
       const member = await databases.createDocument(
