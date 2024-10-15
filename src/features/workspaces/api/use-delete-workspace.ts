@@ -4,20 +4,19 @@ import { client } from "@/lib/rpc";
 import { toast } from "sonner";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.workspaces)[":workspaceId"]["$patch"],
+  (typeof client.api.workspaces)[":workspaceId"]["$delete"],
   200
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.workspaces)[":workspaceId"]["$patch"]
+  (typeof client.api.workspaces)[":workspaceId"]["$delete"]
 >;
 
-export const useUpdateWorkspace = () => {
+export const useDeleteWorkspace = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ form, param }) => {
-      const response = await client.api.workspaces[":workspaceId"].$patch({
-        form,
+    mutationFn: async ({ param }) => {
+      const response = await client.api.workspaces[":workspaceId"].$delete({
         param,
       });
       if (!response.ok) {
@@ -26,7 +25,7 @@ export const useUpdateWorkspace = () => {
       return await response.json();
     },
     onSuccess: ({ data }) => {
-      toast.success("Workspace updated", { id: "UpdateWorkspace" });
+      toast.success("Workspace cancelled", { id: "DeleteWorkspace" });
       queryClient.invalidateQueries({
         queryKey: ["workspaces"],
       });
@@ -36,7 +35,7 @@ export const useUpdateWorkspace = () => {
     },
     onError: (error) => {
       console.log(error);
-      toast.error("Failed to update workspace", { id: "UpdateWorkspace" });
+      toast.error("Failed to delete workspace", { id: "DeleteWorkspace" });
     },
   });
 
