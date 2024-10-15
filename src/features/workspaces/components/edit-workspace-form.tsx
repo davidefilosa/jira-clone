@@ -19,13 +19,14 @@ import { toast } from "sonner";
 import { useRef } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
-import { ArrowLeft, ImageIcon } from "lucide-react";
+import { ArrowLeft, Copy, ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useUpdateWorkspace } from "../api/use-update-workspace";
 import { Workspace } from "../types";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteWorkspace } from "../api/use-delete-workspace";
+import { useResetInvite } from "../api/use-reset-invite";
 
 interface EditWorkspaceFormProps {
   onCancel?: () => void;
@@ -44,6 +45,7 @@ export const EditWorkspaceForm = ({
   const { mutate, isPending } = useUpdateWorkspace();
   const { mutate: deleteMutate, isPending: pendingDelete } =
     useDeleteWorkspace();
+  const { mutate: resetInviteCode, isPending: pendingReset } = useResetInvite();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,9 +88,29 @@ export const EditWorkspaceForm = ({
     );
   };
 
+  const onReset = () => {
+    toast.loading("Resetting invite link...", { id: "ResetInvite" });
+
+    resetInviteCode(
+      { param: { workspaceId: initialValue.$id } },
+      {
+        onSuccess: () => {
+          router.refresh();
+        },
+        onError: (error) => console.log(error),
+      }
+    );
+  };
+
   const [DeleteDialog, confirmDelete] = useConfirm(
     "Delete Workspace",
     "This action can not be undone",
+    "destructive"
+  );
+
+  const [ResetDialog, confirmReset] = useConfirm(
+    "Reset invite link",
+    "This will invalidate the current invite link",
     "destructive"
   );
 
@@ -100,9 +122,25 @@ export const EditWorkspaceForm = ({
     onDelete();
   };
 
+  const handleReset = async () => {
+    const ok = await confirmReset();
+
+    if (!ok) return;
+
+    onReset();
+  };
+
+  const fullInviteLink = `${window.location.origin}/workspace/${initialValue.$id}/join/${initialValue.inviteCode}`;
+
+  const handleCopyInviteLink = () => {
+    navigator.clipboard
+      .writeText(fullInviteLink)
+      .then(() => toast.success("Invite link copied to clipboard"));
+  };
   return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
+      <ResetDialog />
       <Card className="w-full h-full border-none shadow-none">
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 spyce-y-0">
           <Button
@@ -235,11 +273,41 @@ export const EditWorkspaceForm = ({
       <Card className="w-full h-full border-none shadow-none">
         <CardContent className="p-7">
           <div className="flex flex-col">
+            <h3 className="font-bold">Invite Members</h3>
+            <p className="text-sm text-muted-foreground">
+              Use the invite link to add a member to your workspace
+            </p>
+            <div className="mt-4">
+              <div className="flex items-center gap-x-2">
+                <Input disabled value={fullInviteLink} />
+                <Button variant={"teritrary"} className="size-12">
+                  <Copy className="size-5" onClick={handleCopyInviteLink} />
+                </Button>
+              </div>
+            </div>
+            <DottedSeparator className="py-7" />
+            <Button
+              className="mt-6 w-fit ml-auto"
+              size={"sm"}
+              variant={"destructive"}
+              type="button"
+              disabled={isPending}
+              onClick={handleReset}
+            >
+              Reset invite code
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="w-full h-full border-none shadow-none">
+        <CardContent className="p-7">
+          <div className="flex flex-col">
             <h3 className="font-bold">Danger Zone</h3>
             <p className="text-sm text-muted-foreground">
               Deleting workspace is irreversible and will remove all associated
               date
             </p>
+            <DottedSeparator className="py-7" />
             <Button
               className="mt-6 w-fit ml-auto"
               size={"sm"}
