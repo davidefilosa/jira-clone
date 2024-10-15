@@ -39,10 +39,10 @@ const app = new Hono()
       const user = c.get("user");
       const { name, image } = c.req.valid("form");
 
-      let updatedImageUrl: string | undefined;
+      let updatedImageUrl: string | undefined = "";
 
       if (image instanceof Blob) {
-        const imageFile = new File([image], "name.png");
+        const imageFile = new File([image], "image.png");
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
@@ -99,10 +99,10 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
 
-      let updatedImageUrl: string | undefined;
+      let updatedImageUrl: string | undefined = "";
 
       if (image instanceof Blob) {
-        const imageFile = new File([image], "name.png");
+        const imageFile = new File([image], "image.png");
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),

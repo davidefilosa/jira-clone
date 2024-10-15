@@ -113,7 +113,7 @@ export const EditWorkspaceForm = ({
                         <div className="size-[72px] relative rounded-md overflow-hidden">
                           <Image
                             src={
-                              field.value instanceof File
+                              field.value instanceof Blob
                                 ? URL.createObjectURL(field.value)
                                 : field.value
                             }
@@ -142,18 +142,37 @@ export const EditWorkspaceForm = ({
                           disabled={isPending}
                           onChange={handleImageChange}
                         />
-                        <Button
-                          onClick={() => inputRef.current?.click()}
-                          type="button"
-                          variant={"teritrary"}
-                          disabled={isPending}
-                          size="xs"
-                          className="w-fit mt-2"
-                        >
-                          Upload image
-                        </Button>
+                        {field.value ? (
+                          <Button
+                            onClick={() => {
+                              field.onChange("");
+                              if (inputRef.current) {
+                                inputRef.current.value = "";
+                              }
+                            }}
+                            type="button"
+                            variant={"destructive"}
+                            disabled={isPending}
+                            size="xs"
+                            className="w-fit mt-2"
+                          >
+                            Remove image
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => inputRef.current?.click()}
+                            type="button"
+                            variant={"teritrary"}
+                            disabled={isPending}
+                            size="xs"
+                            className="w-fit mt-2"
+                          >
+                            Upload image
+                          </Button>
+                        )}
                       </div>
                     </div>
+                    <FormMessage />
                   </div>
                 )}
               />
