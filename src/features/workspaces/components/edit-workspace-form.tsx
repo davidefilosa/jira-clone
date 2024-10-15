@@ -53,7 +53,7 @@ export const EditWorkspaceForm = ({
     toast.loading("Updating workspace", { id: "UpdateWorkspace" });
     const finalValues = {
       ...values,
-      image: values.image instanceof File ? values.image : undefined,
+      image: values.image instanceof File ? values.image : "",
     };
     mutate(
       { form: finalValues, param: { workspaceId: initialValue.$id } },

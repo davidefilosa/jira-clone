@@ -41,11 +41,12 @@ const app = new Hono()
 
       let updatedImageUrl: string | undefined;
 
-      if (image instanceof File) {
+      if (image instanceof Blob) {
+        const imageFile = new File([image], "name.png");
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
-          image
+          imageFile
         );
 
         const arrayBuffer = await storage.getFilePreview(
@@ -100,11 +101,12 @@ const app = new Hono()
 
       let updatedImageUrl: string | undefined;
 
-      if (image instanceof File) {
+      if (image instanceof Blob) {
+        const imageFile = new File([image], "name.png");
         const file = await storage.createFile(
           IMAGES_BUCKET_ID,
           ID.unique(),
-          image
+          imageFile
         );
 
         const arrayBuffer = await storage.getFilePreview(
