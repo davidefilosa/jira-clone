@@ -130,13 +130,14 @@ export const EditWorkspaceForm = ({
     onReset();
   };
 
-  const fullInviteLink = `${window.location.origin}/workspace/${initialValue.$id}/join/${initialValue.inviteCode}`;
+  const fullInviteLink = `${window.location.origin}/workspaces/${initialValue.$id}/join/${initialValue.inviteCode}`;
 
   const handleCopyInviteLink = () => {
     navigator.clipboard
       .writeText(fullInviteLink)
       .then(() => toast.success("Invite link copied to clipboard"));
   };
+
   return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
