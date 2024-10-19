@@ -82,6 +82,6 @@ body {
   scrollbar-width: none;
 }
 
-.hide-scrollbar::--webkit-scrollbar {
+.hide-scrollbar::state(webkit-scrollbar) {
   display: none;
 }
