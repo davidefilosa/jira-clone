@@ -68,7 +68,7 @@ export const CreateTaskForm = ({
       {
         onSuccess: ({ data }) => {
           form.reset();
-          router.push(`/workspaces/${workspaceId}/projects/${data.$id}`);
+          onCancel && onCancel();
         },
         onError: (error) => console.log(error),
       }
