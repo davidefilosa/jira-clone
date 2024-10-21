@@ -9,6 +9,9 @@ import React from "react";
 import { useDeleteTask } from "../api/use-delete-task";
 import { toast } from "sonner";
 import { useConfirm } from "@/hooks/use-confirm";
+import { useRouter } from "next/navigation";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspaceId";
+import { useEditTaskModal } from "../hooks/use-edit-task-modal";
 
 interface TaskActionsProps {
   id: string;
@@ -18,6 +21,16 @@ interface TaskActionsProps {
 
 export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
   const { mutate: deleteTask, isPending } = useDeleteTask();
+  const router = useRouter();
+  const workspaceId = useWorkspaceId();
+
+  const onOpenTask = () => {
+    router.push(`/workspaces/${workspaceId}/tasks/${id}`);
+  };
+
+  const onOpenProject = () => {
+    router.push(`/workspaces/${workspaceId}/projects/${projectId}`);
+  };
 
   const onDelete = () => {
     toast.loading("Deleting task...", { id: "DeleteTask" });
@@ -45,6 +58,8 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
     onDelete();
   };
 
+  const { open } = useEditTaskModal();
+
   return (
     <div className="flex justify-end">
       <DeleteDialog />
@@ -52,7 +67,7 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem
-            onClick={() => {}}
+            onClick={onOpenTask}
             className="font-medium p-[10px]"
             disabled={false}
           >
@@ -60,7 +75,9 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
             Task Details
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => {}}
+            onClick={() => {
+              open(id);
+            }}
             className="font-medium p-[10px]"
             disabled={false}
           >
@@ -68,7 +85,7 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
             Edit Task
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => {}}
+            onClick={onOpenProject}
             className="font-medium p-[10px]"
             disabled={false}
           >
@@ -80,7 +97,7 @@ export const TaskActions = ({ id, projectId, children }: TaskActionsProps) => {
               handleDelete();
             }}
             className="text-amber-700 focus:text-amber-700 font-medium p-[10px]"
-            disabled={false}
+            disabled={isPending}
           >
             <Trash className="text-amber-700 size-4 mr-2 stroke-2" />
             Delete Task
