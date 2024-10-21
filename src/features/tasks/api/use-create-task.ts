@@ -17,9 +17,10 @@ export const useCreateTask = () => {
       }
       return await response.json();
     },
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
       toast.success("Task created", { id: "CreateTask" });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task", data.$id] });
     },
     onError: (error) => {
       console.log(error);

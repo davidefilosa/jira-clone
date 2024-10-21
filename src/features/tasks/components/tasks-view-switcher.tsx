@@ -13,6 +13,7 @@ import { DataFilter } from "./data-filter";
 import { useTasksFilter } from "../hooks/use-tasks-filter";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import { DataKanban } from "./data-kanban";
 
 export const TasksViewSwitcher = () => {
   const { open } = useCreateTaskModal();
@@ -28,6 +29,7 @@ export const TasksViewSwitcher = () => {
   const [view, setView] = useQueryState("task-view", {
     defaultValue: "table",
   });
+
   return (
     <Tabs
       className="flex-1 w-full border rounded-lg"
@@ -62,10 +64,10 @@ export const TasksViewSwitcher = () => {
         ) : (
           <>
             <TabsContent value="table" className="mt-0">
-              <DataTable columns={columns} data={tasks?.documents} />
+              <DataTable columns={columns} data={tasks?.documents ?? []} />
             </TabsContent>
             <TabsContent value="kanban" className="mt-0">
-              {JSON.stringify(tasks)}
+              <DataKanban data={tasks?.documents ?? []} />
             </TabsContent>
             <TabsContent value="calendar" className="mt-0">
               {JSON.stringify(tasks)}

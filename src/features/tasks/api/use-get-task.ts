@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetTask = (taskId: string) => {
   const query = useQuery({
-    queryKey: ["task"],
+    queryKey: ["task", taskId],
     queryFn: async () => {
       const response = await client.api.tasks[":taskId"].$get({
         param: { taskId },
