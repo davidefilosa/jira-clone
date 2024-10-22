@@ -1,5 +1,7 @@
 import { Models } from "node-appwrite";
 import { Project } from "../projects/types";
+import { Member } from "../members/types";
+import { Workspace } from "../workspaces/types";
 
 export enum TaskStatus {
   BACKLOG = "BACKLOG",
@@ -18,4 +20,7 @@ export type Task = Models.Document & {
   position: number;
   dueDate: string;
   description: string;
+  project: Project;
+  assignee: Member;
+  workspace: Workspace;
 };
