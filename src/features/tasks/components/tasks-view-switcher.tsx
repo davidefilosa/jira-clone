@@ -18,7 +18,13 @@ import { TaskStatus } from "../types";
 import { useBulkUpdateTask } from "../api/use-bulk-update-task";
 import { DataCalendar } from "./data-calendar";
 
-export const TasksViewSwitcher = () => {
+interface TasksViewSwitcherProps {
+  hideProjectFilter?: boolean;
+}
+
+export const TasksViewSwitcher = ({
+  hideProjectFilter,
+}: TasksViewSwitcherProps) => {
   const { open } = useCreateTaskModal();
   const workspaceId = useWorkspaceId();
   const [{ status, assigneeId, projectId, dueDate }] = useTasksFilter();
@@ -68,7 +74,7 @@ export const TasksViewSwitcher = () => {
           </Button>
         </div>
         <DottedSeparator className="my-4" />
-        <DataFilter />
+        <DataFilter hideProjectFilter={hideProjectFilter} />
         <DottedSeparator className="my-4" />
         {isLoading ? (
           <div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">
