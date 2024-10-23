@@ -1,9 +1,11 @@
 "use client";
 
+import { Analytics } from "@/components/analytics";
 import { PageError } from "@/components/page-error";
 import { PageLoader } from "@/components/page-loader";
 import { Button } from "@/components/ui/button";
 import { useGetProject } from "@/features/projects/api/use-get-project";
+import { useGetProjectAnalytics } from "@/features/projects/api/use-get-project-analytics";
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { useProjectId } from "@/features/projects/hooks/use-projectId";
 import { TasksViewSwitcher } from "@/features/tasks/components/tasks-view-switcher";
@@ -13,8 +15,10 @@ import Link from "next/link";
 export const Client = () => {
   const projectId = useProjectId();
   const { data, isLoading } = useGetProject(projectId);
+  const { data: analytics, isLoading: isLoadingAnalytics } =
+    useGetProjectAnalytics(projectId);
 
-  if (isLoading) return <PageLoader />;
+  if (isLoading || isLoadingAnalytics) return <PageLoader />;
   if (!data) return <PageError message="Failed to laod project" />;
   return (
     <div className="flex flex-col gap-y-4">
@@ -39,6 +43,7 @@ export const Client = () => {
           </Button>
         </div>
       </div>
+      {analytics && <Analytics data={analytics} />}
       <TasksViewSwitcher hideProjectFilter />
     </div>
   );

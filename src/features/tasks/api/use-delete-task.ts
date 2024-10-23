@@ -32,6 +32,9 @@ export const useDeleteTask = () => {
       queryClient.invalidateQueries({
         queryKey: ["task", data.$id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["project-analitycs"],
+      });
     },
     onError: (error) => {
       console.log(error);

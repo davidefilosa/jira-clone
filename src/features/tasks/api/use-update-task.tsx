@@ -33,6 +33,9 @@ export const useUpdateTask = () => {
       queryClient.invalidateQueries({
         queryKey: ["task", data.$id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["project-analitycs", data.projectId],
+      });
     },
     onError: (error) => {
       console.log(error);
