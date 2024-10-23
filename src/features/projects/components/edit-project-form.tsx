@@ -61,11 +61,7 @@ export const EditProjectForm = ({
     mutate(
       { form: finalValues, param: { projectId: initialValue.$id } },
       {
-        onSuccess: ({ data }) => {
-          form.reset();
-          router.push(`/workspaces/${data.workspaceId}/projects/${data.$id}`);
-          router.refresh();
-        },
+        onSuccess: () => {},
         onError: (error) => console.log(error),
       }
     );

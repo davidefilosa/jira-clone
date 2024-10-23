@@ -64,10 +64,7 @@ export const EditWorkspaceForm = ({
     mutate(
       { form: finalValues, param: { workspaceId: initialValue.$id } },
       {
-        onSuccess: ({ data }) => {
-          form.reset();
-          router.push(`/workspaces/${data.$id}`);
-        },
+        onSuccess: () => {},
         onError: (error) => console.log(error),
       }
     );
@@ -94,9 +91,7 @@ export const EditWorkspaceForm = ({
     resetInviteCode(
       { param: { workspaceId: initialValue.$id } },
       {
-        onSuccess: () => {
-          router.refresh();
-        },
+        onSuccess: () => {},
         onError: (error) => console.log(error),
       }
     );
